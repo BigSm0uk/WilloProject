@@ -1,1 +1,95 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./app/variables";
+
+body{
+  padding: 0;
+  margin: 0;
+  background-color: $base-backround;
+  color: $font-color;
+  font-size: $font-weight;
+}
+.table_headers {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  &.x3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.table_header {
+  font-size: 24px;
+  text-align: center;
+  padding: 10px 0;
+  background-color: $base-backround;
+}
+.table {
+  position: relative;
+  width: calc(100% - 20px);
+  left: 10px;
+  background-color: $base-backround-active;
+}
+.table_row {
+  cursor: pointer;
+  border-bottom: 1px solid $gray-dark;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  text-align: center;
+  padding: 20px 0;
+  transition: all 0.2s ease-out;
+  &:hover {
+    transition: all 0.2s ease-out;
+    box-shadow: 0 1px 15px $gray;
+  }
+  &.x3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &.x1 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+.table_value {
+  grid-template-columns: repeat(1, 1fr);
+  display: grid;
+  text-align: center;
+  padding: 10px;
+  width: calc(100% - 20px);
+  border-bottom: 1px solid $gray-dark;
+  &.hide {
+    display: none;
+  }
+}
+.btn{
+  border-radius: 50px;
+  cursor: pointer;
+  padding: 17px 24px;
+  max-width: 200px;
+  color: $white;
+  background-color: $indigo;
+  border: none;
+  transition: 0.3s ease;
+  box-shadow: 0 5px 10px rgba(4, 0, 252, 0.2) !important;
+  &:hover {
+    background-color: $purple;
+    transition: 0.3s ease;
+  }
+  &.plus {
+    width: 70px;
+    font-size: 30px;
+    border-radius: 50%;
+    scale: 0.7;
+  }
+  &:disabled {
+    background-color: $gray-dark;
+  }
+}
+p {
+  display: block;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
