@@ -1,0 +1,26 @@
+@import "../../variables";
+
+.display {
+  display: flex;
+  flex-direction: column;
+}
+.nav {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+  width: 100%;
+  background-color: $base-backround-active;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: $nav_height;
+  font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+}
+.nav-items {
+  padding: 0 15px;
+  cursor: pointer;
+}
+.active-display{
+  width: 100%;
+  height: calc(100% - $nav_height);
+}

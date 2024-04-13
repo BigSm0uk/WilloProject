@@ -1,0 +1,60 @@
+@if (!!pump) {
+  <div class="form-img">
+    <form action="" [formGroup]="pumpsForm!" (ngSubmit)="submitForm()">
+      <div class="pumps-form">
+        <div>
+          Наименование
+          <input [classList]="_name!.invalid ? 'input error' : 'input'" type="text" formControlName="name"/>
+        </div>
+        <div>
+          Максимальное давление, бар
+          <input [classList]="_maxpressure!.invalid ? 'input error' : 'input'" type="text"
+                 formControlName="maxpressure"/>
+        </div>
+        <div>
+          Температура жидкости, 0С
+          <input [classList]="_liquidtemperature!.invalid ? 'input error' : 'input'" type="text"
+                 formControlName="liquidtemperature"/>
+        </div>
+        <div>
+          Вес, кг
+          <input [classList]="_weight!.invalid ? 'input error' : 'input'" type="text" formControlName="weight"/>
+        </div>
+        <div>
+          Мотор
+          <input class="input" type="text" [value]="pump.motorid"/>
+        </div>
+        <div>
+          Материал корпуса
+          <input class="input" type="text" [value]="pump.framematerialid"/>
+        </div>
+        <div>
+          Материал рабочего колеса
+          <input class="input" type="text" [value]="pump.wheelmaterialid"/>
+        </div>
+        <div>
+          Описание насоса
+          <input [classList]="_description!.invalid ? 'input error' : 'input'" type="text"
+                 formControlName="description"/>
+        </div>
+        <div>
+          Цена, руб
+          <input [classList]="_price!.invalid ? 'input error' : 'input'" type="text" formControlName="price"/>
+        </div>
+        <div>
+        <p>Загрузить новое фото насоса</p>
+          <input
+            type="file"
+            accept=".jpg"
+            (change)="fileSelected($event)"
+          />
+        </div>
+
+        <button type="submit" class="btn" [disabled]="pumpsForm!.invalid">Сохранить изменения</button>
+      </div>
+    </form>
+    <div >
+      <img class="img" [src]="pump.image" alt="">
+    </div>
+  </div>
+}

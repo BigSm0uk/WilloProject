@@ -1,0 +1,14 @@
+<div class="display">
+  <div class="nav">
+  <span class="nav-items" [routerLink]="''">
+    Главная
+  </span>
+    <span class="nav-items" [routerLink]="'/pumps'">
+    Все оборудование
+  </span>
+  </div>
+
+  <div class="active-display">
+    <router-outlet></router-outlet>
+  </div>
+</div>

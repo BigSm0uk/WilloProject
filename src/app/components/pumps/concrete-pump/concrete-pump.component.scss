@@ -1,0 +1,51 @@
+@import "../../../variables";
+.form-img{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  top: 10px;
+    position: relative;
+}
+.img{
+  width: 500px;
+  height: 500px;
+}
+.pumps-form{
+  padding: 10px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  width: 1200px;
+  position: relative;
+  background-color: $base-backround-active;
+  border-radius: 10px;
+  z-index: 10;
+  transition: 0.5s ease-in-out;
+  color: white;
+  margin-bottom: 75px;
+}
+.input{
+  text-decoration: none;
+  margin-top: 10px;
+  border: none;
+  height: 40px;
+  width: calc(100% - 30px);
+  padding: 0 15px;
+  background-color: #2b3c57;
+  font-size: 16px;
+  border-radius: 7px;
+  color: $white;
+  &.big {
+    height: 300px;
+    padding: 10px 15px;
+    overflow: auto;
+    text-decoration: none;
+    outline: 0 !important;
+    text-align: left;
+    max-width: calc(100% - 30px);
+  }
+  &.error{
+    box-shadow: 0 0 15px red;
+  }
+}

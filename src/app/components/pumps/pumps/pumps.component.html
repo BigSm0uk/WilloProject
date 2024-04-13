@@ -1,0 +1,19 @@
+<div class="table">
+  <div class="table_headers x3">
+    <div class="table_header">Наименование</div>
+    <div class="table_header">Описание насоса</div>
+    <div class="table_header">Цена</div>
+  </div>
+  <div class="pumps">
+    @if (pumps?.length === 0) {
+      <div class="loader"></div>
+    }
+    @for (pump of pumps; track pump.id) {
+      <div class="table_row x3" [routerLink]="['/pumps', pump.id]">
+        <span>{{ pump.name }}</span>
+        <span>{{ pump.description }}</span>
+        <span>{{ pump.price }}</span>
+      </div>
+    }
+  </div>
+</div>
