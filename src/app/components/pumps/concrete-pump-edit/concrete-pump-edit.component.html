@@ -1,4 +1,4 @@
-@if (!!pump) {
+@if (!!pump && !!pumpsForm) {
   <div class="form-img">
     <form action="" [formGroup]="pumpsForm!" (ngSubmit)="submitForm()">
       <div class="pumps-form">
@@ -22,15 +22,15 @@
         </div>
         <div>
           Мотор
-          <input class="input" type="text" [value]="pump.motorid"/>
+          <span class="input">{{ pump.motor?.name }}</span>
         </div>
         <div>
           Материал корпуса
-          <input class="input" type="text" [value]="pump.framematerialid"/>
+          <span class="input">{{ pump.framematerial?.name }}</span>
         </div>
         <div>
           Материал рабочего колеса
-          <input class="input" type="text" [value]="pump.wheelmaterialid"/>
+          <span class="input">{{ pump.wheelmaterial?.name }}</span>
         </div>
         <div>
           Описание насоса
@@ -42,7 +42,7 @@
           <input [classList]="_price!.invalid ? 'input error' : 'input'" type="text" formControlName="price"/>
         </div>
         <div>
-        <p>Загрузить новое фото насоса</p>
+          <p>Загрузить новое фото насоса</p>
           <input
             type="file"
             accept=".jpg"
@@ -51,10 +51,16 @@
         </div>
 
         <button type="submit" class="btn" [disabled]="pumpsForm!.invalid">Сохранить изменения</button>
+        <div class="del right" (click)="OnDelete()">
+          <i class=" gg-close-r "></i>
+        </div>
       </div>
     </form>
-    <div >
-      <img class="img" [src]="pump.image" alt="">
+    <div>
+      <img class="img" [src]="[img]" alt="">
+
     </div>
+
   </div>
+
 }

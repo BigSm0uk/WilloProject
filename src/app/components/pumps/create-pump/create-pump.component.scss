@@ -4,7 +4,7 @@
   flex-direction: row;
   gap: 20px;
   top: 10px;
-    position: relative;
+  position: relative;
 }
 .img{
   width: 500px;
@@ -27,6 +27,8 @@
 }
 .input{
   text-decoration: none;
+  display: flex;
+  align-items: center;
   margin-top: 10px;
   border: none;
   height: 40px;

@@ -1,22 +1,22 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-import {IPump} from "../../../models/IPump";
+import {IPumpWithDetails} from "../../../models/PumpEquimpInterfaces";
 import {WebService} from "../../../services/web.service";
 import {Subscription} from "rxjs";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-concrete-pump',
+  selector: 'app-concrete-pump-edit',
   standalone: true,
   imports: [
-    FormsModule,
     ReactiveFormsModule
   ],
-  templateUrl: './concrete-pump.component.html',
-  styleUrl: './concrete-pump.component.scss'
+  templateUrl: './concrete-pump-edit.component.html',
+  styleUrl: './concrete-pump-edit.component.scss'
 })
-export class ConcretePumpComponent implements OnInit, OnDestroy {
+export class ConcretePumpEditComponent  implements OnInit, OnDestroy {
   public pumpsForm ?: FormGroup;
+  public img ?: string;
 
   submitForm() {
     let pump = this.pumpsForm?.value;
@@ -25,7 +25,7 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
     pumpData.append('maxpressure', pump.maxpressure.toString());
     pumpData.append('liquidtemperature', pump.liquidtemperature.toString());
     pumpData.append('weight', pump.weight.toString());
-    pumpData.append('imagename', '');
+    pumpData.append('imagename', pump.file.name);
     pumpData.append('image', '');
     pumpData.append('price', pump.price.toString());
     pumpData.append('motorid', pump.motorid.toString());
@@ -33,17 +33,17 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
     pumpData.append('wheelmaterialid', pump.wheelmaterialid.toString());
     pumpData.append('description', pump.description);
     pumpData.append('file', pump.file);
-    console.log(pumpData.getAll('name'));
     this.webService.UpdateConcretePump(this.pump!.id, pumpData);
   }
-
+  public OnDelete(){
+    this.webService.DeletePump(this.pump!.id);
+  }
   constructor(private route: ActivatedRoute) {
   }
 
-  public pump?: IPump;
+  public pump?: IPumpWithDetails | null;
   private webService = inject(WebService);
   private pumpId: string = '0';
-  private fileToUpload ?: File;
 
   private route$?: Subscription;
   private pump$?: Subscription;
@@ -51,34 +51,29 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route$ = this.route.params.subscribe((params) => {
       this.pumpId = params['id'];
+      this.webService.GetConcretePump(this.pumpId);
     });
-    this.pump$ = this.webService.pumps$.subscribe((pumps) => {
-      this.pump = pumps.find((x) => x.id === this.pumpId);
+    this.pump$ = this.webService.concretePump$.subscribe((pump) => {
+      this.pump = pump;
+      if (!!this.pump) {
+        this.pumpsForm = new FormGroup({
+          id: new FormControl(this.pump.id, [Validators.required]),
+          name: new FormControl(this.pump.name, [Validators.required]),
+          maxpressure: new FormControl(this.pump.maxpressure, [Validators.required]),
+          liquidtemperature: new FormControl(this.pump.liquidtemperature, [Validators.required]),
+          weight: new FormControl(this.pump.weight, [Validators.required]),
+          price: new FormControl(this.pump.price, [Validators.required]),
+          motorid: new FormControl(this.pump.motorid, [Validators.required]),
+          framematerialid: new FormControl(this.pump.framematerialid, [Validators.required]),
+          wheelmaterialid: new FormControl(this.pump.wheelmaterialid, [Validators.required]),
+          description: new FormControl(this.pump.description, [Validators.required]),
+          file: new FormControl(this.pump.file),
+        })
+        this.toBase64(this.pump.file!).then((res) => this.img = res);
+      }
     });
-    if (!this.pump) return;
-    this.pump.image = this.ByteArrayToImg(this.pump.image);
-    this.pumpsForm = new FormGroup({
-      id: new FormControl(this.pump, [Validators.required]),
-      name: new FormControl(this.pump.name, [Validators.required]),
-      maxpressure: new FormControl(this.pump.maxpressure, [Validators.required]),
-      liquidtemperature: new FormControl(this.pump.liquidtemperature, [Validators.required]),
-      weight: new FormControl(this.pump.weight, [Validators.required]),
-      imagename: new FormControl(this.pump.imagename, [Validators.required]),
-      image: new FormControl(this.pump.image, [Validators.required]),
-      price: new FormControl(this.pump.price, [Validators.required]),
-      motorid: new FormControl(this.pump.motorid, [Validators.required]),
-      framematerialid: new FormControl(this.pump.framematerialid, [Validators.required]),
-      wheelmaterialid: new FormControl(this.pump.wheelmaterialid, [Validators.required]),
-      description: new FormControl(this.pump.description, [Validators.required]),
-      file: new FormControl(this.ByteArrayToFile(this.pump.image, this.pump.imagename)),
-    })
-  }
 
-  public ByteArrayToImg(array: string) {
-    return 'data:image/jpeg;base64,' + array;
-  }
-  public ByteArrayToFile(array: string, filename : string) {
-    return new File([this.ByteArrayToImg(array)], filename, {type: 'image/jpeg'});
+
   }
 
   public fileSelected(event: any) {
@@ -89,13 +84,16 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
       alert('Пожалуйста, выберите картинку (.jpg)');
       return;
     }
-    this.toBase64(file).then(base64 => {
-      this.pumpsForm!.get('file')?.setValue(file);
-      this.pump!.image = base64;
-    });
+    if (this.pump) {
+      this.pumpsForm!.get('file')!.setValue(file);
+      this.pump.file = file;
+      this.toBase64(this.pump.file!).then((res) => this.img = res);
+    } else {
+      console.error('Pump data is not loaded');
+    }
   }
 
-  private toBase64(file: File): Promise<string> {
+  public toBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -107,12 +105,15 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
   get _name() {
     return this.pumpsForm?.get('name');
   }
-
-  get _image() {
-    return this.pumpsForm?.get('image');
+  get _framematerialid(){
+    return this.pumpsForm?.get('framematerialid');
   }
-
-
+  get _motorid(){
+    return this.pumpsForm?.get('motorid');
+  }
+  get _wheelmaterialid(){
+    return this.pumpsForm?.get('wheelmaterialid');
+  }
   get _maxpressure() {
     return this.pumpsForm?.get('maxpressure');
   }
@@ -137,8 +138,4 @@ export class ConcretePumpComponent implements OnInit, OnDestroy {
     this.route$?.unsubscribe();
     this.pump$?.unsubscribe();
   }
-
-
 }
-
-

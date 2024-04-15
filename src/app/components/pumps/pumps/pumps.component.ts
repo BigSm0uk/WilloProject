@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {IPump} from "../../../models/IPump";
+import {IPump} from "../../../models/PumpEquimpInterfaces";
 import {RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
 import {WebService} from "../../../services/web.service";
@@ -29,7 +29,7 @@ export class PumpsComponent implements OnInit, OnDestroy {
     this.pumps$ = this.webService.pumps$.subscribe((pumps) => {
       this.pumps = pumps;
     });
-    this.webService.loadPumpsFromApi();
+    this.webService.GetAllPumps();
   }
 
 }

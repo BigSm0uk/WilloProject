@@ -76,6 +76,10 @@ body{
     background-color: $purple;
     transition: 0.3s ease;
   }
+  &.right{
+    position: absolute;
+    right: 100px;
+  }
   &.plus {
     width: 70px;
     font-size: 30px;
