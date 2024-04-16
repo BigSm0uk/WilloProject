@@ -1,10 +1,8 @@
 import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, pipe, Subject} from "rxjs";
 import {IPump, IPumpWithDetails} from "../models/PumpEquimpInterfaces";
-import {v4 as uuidv4} from "uuid";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {IOperationResult} from "../models/OperationResult";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,7 @@ export class WebService {
   private concretePumpSubject: BehaviorSubject<IPumpWithDetails | null> = new BehaviorSubject<IPumpWithDetails | null>(null);
   public concretePump$ = this.concretePumpSubject.asObservable();
 
-  private baseUrl = 'http://localhost:5068/api/Pump';
+  private baseUrl = 'http://myapp.local:8000/api/Pump';
   public updatePumps(pumps: IPump[]): void {
     this.pumpsSubject.next(pumps);
   }
